@@ -1,5 +1,5 @@
 import {
-	addCakeToDB,
+	insertCakeToDB,
 	checkCakeExists,
 } from '../repositories/cakes.repository.js';
 import {
@@ -22,7 +22,7 @@ export async function newCake(req, res) {
 			return res.sendStatus(404);
 		}
 
-		await addCakeToDB(name, price, image, description, flavourId);
+		await insertCakeToDB(name, price, image, description, flavourId);
 
 		res.sendStatus(201);
 	} catch (error) {

@@ -11,7 +11,13 @@ export async function checkCakeExists(name) {
 	);
 }
 
-export async function addCakeToDB(name, price, image, description, flavourId) {
+export async function insertCakeToDB(
+	name,
+	price,
+	image,
+	description,
+	flavourId
+) {
 	return db.query(
 		`
     INSERT INTO cakes (name, price, image, description, "flavourId")
