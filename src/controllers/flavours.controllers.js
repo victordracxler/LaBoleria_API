@@ -7,9 +7,9 @@ export async function newFlavour(req, res) {
 	const { name } = req.body;
 
 	try {
-		const cakeExists = await checkFlavourExists(name);
+		const flavourExists = await checkFlavourExists(name);
 
-		if (cakeExists.rows.length > 0) {
+		if (flavourExists.rows.length > 0) {
 			return res.sendStatus(409);
 		}
 

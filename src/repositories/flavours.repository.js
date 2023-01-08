@@ -11,6 +11,17 @@ export async function checkFlavourExists(name) {
 	);
 }
 
+export async function checkFlavourExistsByID(id) {
+	return db.query(
+		`
+    SELECT *
+    FROM flavours
+    WHERE id = $1;
+    `,
+		[id]
+	);
+}
+
 export async function addFlavourToDB(name) {
 	return db.query(
 		`
