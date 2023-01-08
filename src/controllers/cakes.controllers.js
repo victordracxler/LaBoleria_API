@@ -4,7 +4,7 @@ import {
 } from '../repositories/cakes.repository.js';
 
 export async function newCake(req, res) {
-	const { name, price, image, description } = req.body;
+	const { name, price, image, description, flavourId } = req.body;
 
 	try {
 		const cakeExists = await checkCakeExists(name);
@@ -13,7 +13,7 @@ export async function newCake(req, res) {
 			return res.sendStatus(409);
 		}
 
-		await addCakeToDB(name, price, image, description);
+		await addCakeToDB(name, price, image, description, flavourId);
 
 		res.sendStatus(201);
 	} catch (error) {
