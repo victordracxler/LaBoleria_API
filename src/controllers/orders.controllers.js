@@ -2,6 +2,7 @@ import { checkClientExistsByID } from '../repositories/clients.repository.js';
 import { checkCakeExistsByID } from '../repositories/cakes.repository.js';
 import {
 	fetchOrders,
+	fetchOrdersById,
 	fetchOrdersWithQuery,
 	insertOrder,
 } from '../repositories/orders.repository.js';
@@ -51,6 +52,24 @@ export async function getOrders(req, res) {
 			res.status(200).send(orders.rows);
 			return;
 		}
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(500);
+	}
+}
+
+export async function getOrdersById(req, res) {
+	const { id } = req.params;
+
+	try {
+		const order = await fetchOrdersById(id);
+
+		if (order.rows.length === 0) {
+			res.sendStatus(404);
+			return;
+		}
+
+		res.status(200).send(order.rows[0]);
 	} catch (error) {
 		console.log(error);
 		res.sendStatus(500);
