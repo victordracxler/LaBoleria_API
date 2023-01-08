@@ -9,3 +9,32 @@ export async function insertOrder(clientId, cakeId, quantity, totalPrice) {
 		[clientId, cakeId, quantity, totalPrice]
 	);
 }
+
+export async function fetchOrders() {
+	return db.query(`
+	SELECT 
+		json_build_object('id', clients.id, 'name', clients.name, 'address', clients.address, 'phone', clients.phone) AS "client",
+		json_build_object('id', cakes.id, 'name', cakes.name, 'price', cakes.price, 'description', cakes.description, 'image', cakes.image) AS "cake",
+		orders.id AS "orderId", orders."createdAt", orders.quantity, orders."totalPrice"
+	FROM orders
+	JOIN clients ON orders."clientId" = clients.id
+	JOIN cakes ON orders."cakeId" = cakes.id;
+
+	`);
+}
+
+export async function fetchOrdersWithQuery(date) {
+	return db.query(
+		`
+	SELECT 
+		json_build_object('id', clients.id, 'name', clients.name, 'address', clients.address, 'phone', clients.phone) AS "client",
+		json_build_object('id', cakes.id, 'name', cakes.name, 'price', cakes.price, 'description', cakes.description, 'image', cakes.image) AS "cake",
+		orders.id AS "orderId", orders."createdAt", orders.quantity, orders."totalPrice"
+	FROM orders
+	JOIN clients ON orders."clientId" = clients.id
+	JOIN cakes ON orders."cakeId" = cakes.id
+	WHERE orders."createdAt" >= $1;
+	`,
+		[date]
+	);
+}

@@ -1,6 +1,10 @@
 import { checkClientExistsByID } from '../repositories/clients.repository.js';
 import { checkCakeExistsByID } from '../repositories/cakes.repository.js';
-import { insertOrder } from '../repositories/orders.repository.js';
+import {
+	fetchOrders,
+	fetchOrdersWithQuery,
+	insertOrder,
+} from '../repositories/orders.repository.js';
 
 export async function newOrder(req, res) {
 	const { clientId, cakeId, quantity, totalPrice } = req.body;
@@ -16,6 +20,37 @@ export async function newOrder(req, res) {
 		await insertOrder(clientId, cakeId, quantity, totalPrice);
 
 		res.sendStatus(201);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(500);
+	}
+}
+
+export async function getOrders(req, res) {
+	const date = req.query.date;
+
+	try {
+		if (date) {
+			const orders = await fetchOrdersWithQuery(date);
+
+			if (orders.rows.length === 0) {
+				res.status(404).send(orders.rows);
+				return;
+			}
+
+			res.status(200).send(orders.rows);
+			return;
+		} else {
+			const orders = await fetchOrders();
+
+			if (orders.rows.length === 0) {
+				res.status(404).send(orders.rows);
+				return;
+			}
+
+			res.status(200).send(orders.rows);
+			return;
+		}
 	} catch (error) {
 		console.log(error);
 		res.sendStatus(500);
