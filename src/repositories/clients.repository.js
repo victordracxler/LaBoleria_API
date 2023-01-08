@@ -9,3 +9,14 @@ export async function insertClientDB(name, address, phone) {
 		[name, address, phone]
 	);
 }
+
+export async function checkClientExistsByID(id) {
+	return db.query(
+		`
+    SELECT *
+    FROM clients
+    WHERE id = $1;
+    `,
+		[id]
+	);
+}

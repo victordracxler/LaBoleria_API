@@ -11,6 +11,17 @@ export async function checkCakeExists(name) {
 	);
 }
 
+export async function checkCakeExistsByID(id) {
+	return db.query(
+		`
+    SELECT *
+    FROM cakes
+    WHERE id = $1;
+    `,
+		[id]
+	);
+}
+
 export async function insertCakeToDB(
 	name,
 	price,
