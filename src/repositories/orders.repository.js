@@ -54,14 +54,3 @@ export async function fetchOrdersById(id) {
 		[id]
 	);
 }
-
-export async function checkOrderExists(id) {
-	return db.query(
-		`
-	SELECT *
-	FROM orders
-	WHERE orders.id >= $1;
-	`,
-		[id]
-	);
-}
