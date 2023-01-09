@@ -14,11 +14,12 @@ export async function fetchOrders() {
 	return db.query(`
 	SELECT 
 		json_build_object('id', clients.id, 'name', clients.name, 'address', clients.address, 'phone', clients.phone) AS "client",
-		json_build_object('id', cakes.id, 'name', cakes.name, 'price', cakes.price, 'description', cakes.description, 'image', cakes.image) AS "cake",
+		json_build_object('id', cakes.id, 'name', cakes.name, 'price', cakes.price, 'description', cakes.description, 'image', cakes.image, 'flavour', flavours.name) AS "cake",
 		orders.id AS "orderId", orders."createdAt", orders.quantity, orders."totalPrice", orders."isDelivered"
 	FROM orders
 	JOIN clients ON orders."clientId" = clients.id
-	JOIN cakes ON orders."cakeId" = cakes.id;
+	JOIN cakes ON orders."cakeId" = cakes.id
+	JOIN flavours ON cakes."flavourId" = flavours.id;
 
 	`);
 }
@@ -28,11 +29,12 @@ export async function fetchOrdersWithQuery(date) {
 		`
 	SELECT 
 		json_build_object('id', clients.id, 'name', clients.name, 'address', clients.address, 'phone', clients.phone) AS "client",
-		json_build_object('id', cakes.id, 'name', cakes.name, 'price', cakes.price, 'description', cakes.description, 'image', cakes.image) AS "cake",
+		json_build_object('id', cakes.id, 'name', cakes.name, 'price', cakes.price, 'description', cakes.description, 'image', cakes.image, 'flavour', flavours.name) AS "cake",
 		orders.id AS "orderId", orders."createdAt", orders.quantity, orders."totalPrice", orders."isDelivered"
 	FROM orders
 	JOIN clients ON orders."clientId" = clients.id
 	JOIN cakes ON orders."cakeId" = cakes.id
+	JOIN flavours ON cakes."flavourId" = flavours.id
 	WHERE orders."createdAt" >= $1;
 	`,
 		[date]
@@ -44,11 +46,12 @@ export async function fetchOrdersById(id) {
 		`
 	SELECT 
 		json_build_object('id', clients.id, 'name', clients.name, 'address', clients.address, 'phone', clients.phone) AS "client",
-		json_build_object('id', cakes.id, 'name', cakes.name, 'price', cakes.price, 'description', cakes.description, 'image', cakes.image) AS "cake",
+		json_build_object('id', cakes.id, 'name', cakes.name, 'price', cakes.price, 'description', cakes.description, 'image', cakes.image, 'flavour', flavours.name) AS "cake",
 		orders.id AS "orderId", orders."createdAt", orders.quantity, orders."totalPrice", orders."isDelivered"
 	FROM orders
 	JOIN clients ON orders."clientId" = clients.id
 	JOIN cakes ON orders."cakeId" = cakes.id
+	JOIN flavours ON cakes."flavourId" = flavours.id
 	WHERE orders.id >= $1;
 	`,
 		[id]
