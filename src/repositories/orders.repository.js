@@ -57,3 +57,14 @@ export async function fetchOrdersById(id) {
 		[id]
 	);
 }
+
+export async function updateOrderStatus(id) {
+	return db.query(
+		`
+	UPDATE orders
+	SET "isDelivered" = TRUE
+	WHERE id = $1;
+	`,
+		[id]
+	);
+}

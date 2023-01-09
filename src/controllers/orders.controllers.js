@@ -5,6 +5,7 @@ import {
 	fetchOrdersById,
 	fetchOrdersWithQuery,
 	insertOrder,
+	updateOrderStatus,
 } from '../repositories/orders.repository.js';
 
 export async function newOrder(req, res) {
@@ -70,6 +71,26 @@ export async function getOrdersById(req, res) {
 		}
 
 		res.status(200).send(order.rows[0]);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(500);
+	}
+}
+
+export async function updateDelivered(req, res) {
+	const { id } = req.params;
+
+	try {
+		const order = await fetchOrdersById(id);
+
+		if (order.rows.length === 0) {
+			res.sendStatus(404);
+			return;
+		}
+
+		await updateOrderStatus(id);
+
+		res.sendStatus(204);
 	} catch (error) {
 		console.log(error);
 		res.sendStatus(500);
