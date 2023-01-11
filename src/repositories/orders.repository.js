@@ -68,3 +68,16 @@ export async function updateOrderStatus(id) {
 		[id]
 	);
 }
+
+export async function fetchClientsOrders(id) {
+	return db.query(
+		`
+	SELECT 
+	orders.id AS "orderId", orders.quantity, orders."createdAt", orders."totalPrice", cakes.name AS "cakeName"
+	FROM orders
+	JOIN cakes ON orders."cakeId" = cakes.id
+	WHERE orders."clientId" = $1;
+	`,
+		[id]
+	);
+}
